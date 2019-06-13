@@ -3,7 +3,7 @@ import re
 from abc import ABCMeta, abstractmethod
 from os import path, getcwd, remove, mkdir
 from urllib.request import urlopen, urlretrieve
-
+from packages.version import Version
 
 class AbstractPackage(object):
     __metaclass__ = ABCMeta
@@ -11,7 +11,6 @@ class AbstractPackage(object):
     def __init__(self):
         self.temp_path = getcwd() + "\\temp\\"
         self.chocolatey_url_pattern = r"https:\/\/chocolatey\.org\/api\/\w\d\/package\/.*"
-        self.Version = collections.namedtuple('Version', ['isNew', 'number'])
 
     @abstractmethod
     def downloadlink(self):
@@ -55,20 +54,20 @@ class AbstractPackage(object):
             remove(self.temp_path)
 
     def chocolatey_version(self, url):
-        version = None
+        version_number = None
         if re.match(self.chocolatey_url_pattern, url):
             # reading version out of filename
             split_url = urlopen(url).geturl().split("/")
             filename = split_url[len(split_url) - 1]
-            version = [int(x) for x in filename.split(".")[1:-1]]
+            version_number = [int(x) for x in filename.split(".")[1:-1]]
         else:
             print("no valid chocolatey-package-url (pattern: " + self.chocolatey_url_pattern + ")")
-        return version
+        return version_number
 
     def compare(self):
         """ compares versions of two files with given urls """
         a = self.version(self.download(self.downloadlink()))
         b = self.chocolatey_version(self.chocolateylink())
         if a != b:
-            return self.Version(True, a)
-        return self.Version(False, b)
+            return Version(True, a)
+        return Version(False, None)

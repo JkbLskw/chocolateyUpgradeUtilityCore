@@ -1,8 +1,7 @@
 import unittest
 from os import getcwd
-from pathlib import Path
 
-from chocolatey import Chocolatey
+from core.chocolatey import Chocolatey
 
 
 class ChocolateyTest(unittest.TestCase):
