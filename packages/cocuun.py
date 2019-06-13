@@ -1,23 +1,35 @@
-from abstract_package import AbstractPackage
+from execuable.exe import Exe
+from packages.abstract_package import AbstractPackage
 
 
-class Cocuun(AbstractPackage):
+class Cocuun(AbstractPackage, Exe):
     """ cocuun package """
 
+    def __init__(self):
+        Exe.__init__(self)
+        AbstractPackage.__init__(self)
+        self.chocolatey_link = "https://chocolatey.org/api/v2/package/cocuun"
+        self.package_path = "D:/Chocolatey_Packages/cocuun-package/"
+        self.package_tools_path = "tools/"
+        self.nuspec_name = "cocuun.nuspec"
+        self.install_script_name = "chocolateyInstall.ps1"
+        self.uninstall_script_name = "chocolateyUninstall.ps1"
+        self.download_link = "https://www.cocuun.de/desktop/Cocuun-Setup.exe"
+
     def downloadlink(self):
-        pass
+        return self.download_link
 
     def chocolateylink(self):
-        pass
+        return self.chocolatey_link
 
     def packagepath(self):
-        pass
+        return self.package_path
 
     def nuspec(self):
-        pass
+        return self.packagepath() + self.nuspec_name
 
     def installscript(self):
-        pass
+        return self.packagepath() + self.package_tools_path + self.install_script_name
 
     def uninstallscript(self):
-        pass
+        return self.packagepath() + self.package_tools_path + self.uninstall_script_name
