@@ -1,45 +1,43 @@
 from helper.package_helper import PackageHelper
 from helper.manipulator import Manipulator
-
-
 from core.chocolatey import Chocolatey
 from packages.deezer import Deezer
 from packages.elster import Elster
+from packages.cocuun import Cocuun
+import logging
 
-# TODO: making CLI out of this
+logging.basicConfig(level=logging.INFO, format='%(asctime)s %(message)s', datefmt='%d/%m/%Y %H:%M:%S')
+
+
 class Processor(object):
 
-    def __init__(self, chocolatey, packages):
-        """ processor for package updates """
-        self.chocolatey = chocolatey
-        self.packages = packages
-        self.checksum_pattern = r"\s+checksum\s+=\s+\'[a-zA-Z0-9]{64}\'"
-        self.version_pattern = "version"
-
-    def start_flow(self):
-        """ starts comparison and file updates of packages """
-        for package in self.packages:
+    @classmethod
+    def upgrade(cls, chocolatey, packages):
+        """ starts comparison and upgrades of packages """
+        checksum_pattern = r"\s+checksum\s+=\s+\'[a-zA-Z0-9]{64}\'"
+        version_pattern = "version"
+        for package in packages:
             version = package.compare()
             if version.is_new():
                 manipulator = Manipulator()
                 changed_nuspec = manipulator.xml(package.nuspec(),
-                                                 self.version_pattern,
+                                                 version_pattern,
                                                  version.get_number())
                 changed_installscript = manipulator.plaintext(package.installscript(),
                                                               PackageHelper.checksum(package.temp_path),
-                                                              self.checksum_pattern)
+                                                              checksum_pattern)
                 if changed_nuspec and changed_installscript:
-                    is_packed = self.chocolatey.pack(package.nuspec(), package.packagepath())
-                print("[" + type(package).__name__ + "] updated to: "
-                      + version.get_number()
-                      + " [nuspec: " + str(changed_nuspec) + "]"
-                      + " [installscript: " + str(changed_installscript) + "]"
-                      + " [packed: " + str(is_packed) + "]")
+                    is_packed = chocolatey.pack(package.nuspec(), package.packagepath())
+                    logging.info("[%s] updated to %s [nuspec: %s][installscript: %s][packed: %s]",
+                                 type(package).__name__,
+                                 version.get_number(),
+                                 str(changed_nuspec),
+                                 str(changed_installscript,
+                                     str(is_packed)))
             else:
-                print("[" + type(package).__name__ + "] up to date")
+                logging.info("[%s] up to date", type(package).__name__)
             package.cleanup()
 
 
 if __name__ == "__main__":
-    processor = Processor(Chocolatey(), [Deezer(), Elster()])
-    processor.start_flow()
+    Processor.upgrade(Chocolatey(), [Cocuun()])

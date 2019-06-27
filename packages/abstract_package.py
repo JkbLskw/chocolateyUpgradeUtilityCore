@@ -1,6 +1,7 @@
-import collections
+import logging
 import re
 from abc import ABCMeta, abstractmethod
+from progressbar import ProgressBar, Percentage, Bar, UnknownLength
 from os import path, getcwd, remove, mkdir
 from urllib.request import urlopen, urlretrieve
 from packages.version import Version
@@ -9,6 +10,7 @@ class AbstractPackage(object):
     __metaclass__ = ABCMeta
 
     def __init__(self):
+        self.progressbar = None
         self.temp_path = getcwd() + "\\temp\\"
         self.chocolatey_url_pattern = r"https:\/\/chocolatey\.org\/api\/\w\d\/package\/.*"
 
@@ -46,8 +48,13 @@ class AbstractPackage(object):
         if not path.exists(self.temp_path):
             mkdir(self.temp_path, 755)
         self.temp_path = self.temp_path + urlopen(url).geturl().split("/")[-1]
-        response = urlretrieve(url, self.temp_path)
+        response = urlretrieve(url, self.temp_path, reporthook=self.download_progress)
         return self.temp_path
+
+    def download_progress(self, count, blocksize, totalsize):
+        if self.progressbar is None:
+            self.progressbar = ProgressBar(maxval=totalsize, widgets=[Percentage(), Bar()])
+        self.progressbar.update(int(count * blocksize * 100 / totalsize))
 
     def cleanup(self):
         if path.exists(self.temp_path):
