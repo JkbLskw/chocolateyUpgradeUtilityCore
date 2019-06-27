@@ -1,2 +1,2 @@
-# chocolateyUpgradeUtilities
+# chocolateyUpgradeUtilityCore
 Upgrades automatically chocolatey packages
