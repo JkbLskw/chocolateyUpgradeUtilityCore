@@ -1,10 +1,10 @@
 import logging
 import re
 from abc import ABCMeta, abstractmethod
-from progressbar import ProgressBar, Percentage, Bar, UnknownLength
 from os import path, getcwd, remove, mkdir
 from urllib.request import urlopen, urlretrieve
 from packages.version import Version
+
 
 class AbstractPackage(object):
     __metaclass__ = ABCMeta
@@ -48,13 +48,8 @@ class AbstractPackage(object):
         if not path.exists(self.temp_path):
             mkdir(self.temp_path, 755)
         self.temp_path = self.temp_path + urlopen(url).geturl().split("/")[-1]
-        response = urlretrieve(url, self.temp_path, reporthook=self.download_progress)
+        response = urlretrieve(url, self.temp_path)
         return self.temp_path
-
-    def download_progress(self, count, blocksize, totalsize):
-        if self.progressbar is None:
-            self.progressbar = ProgressBar(maxval=totalsize, widgets=[Percentage(), Bar()])
-        self.progressbar.update(int(count * blocksize * 100 / totalsize))
 
     def cleanup(self):
         if path.exists(self.temp_path):
@@ -73,8 +68,6 @@ class AbstractPackage(object):
 
     def compare(self):
         """ compares versions of two files with given urls """
-        a = self.version(self.download(self.downloadlink()))
-        b = self.chocolatey_version(self.chocolateylink())
-        if a != b:
-            return Version(True, a)
-        return Version(False, None)
+        download_version = self.version(self.download(self.downloadlink()))
+        chocolatey_version = self.chocolatey_version(self.chocolateylink())
+        return Version(download_version, chocolatey_version)

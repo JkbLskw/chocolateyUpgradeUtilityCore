@@ -22,22 +22,23 @@ class Processor(object):
                 manipulator = Manipulator()
                 changed_nuspec = manipulator.xml(package.nuspec(),
                                                  version_pattern,
-                                                 version.get_number())
+                                                 version.get())
                 changed_installscript = manipulator.plaintext(package.installscript(),
                                                               PackageHelper.checksum(package.temp_path),
                                                               checksum_pattern)
                 if changed_nuspec and changed_installscript:
                     is_packed = chocolatey.pack(package.nuspec(), package.packagepath())
-                    logging.info("[%s] updated to %s [nuspec: %s][installscript: %s][packed: %s]",
+                    logging.info("[%s] updated from (%s) to (%s) [nuspec: %s][installscript: %s][packed: %s]",
                                  type(package).__name__,
-                                 version.get_number(),
+                                 version.get(last=True),
+                                 version.get(),
                                  str(changed_nuspec),
-                                 str(changed_installscript,
-                                     str(is_packed)))
+                                 str(changed_installscript),
+                                     is_packed)
             else:
                 logging.info("[%s] up to date", type(package).__name__)
             package.cleanup()
 
 
 if __name__ == "__main__":
-    Processor.upgrade(Chocolatey(), [Cocuun()])
+    Processor.upgrade(Chocolatey(), [Elster(), Cocuun()])

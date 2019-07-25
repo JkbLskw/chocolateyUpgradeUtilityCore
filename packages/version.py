@@ -1,14 +1,22 @@
 class Version(object):
-    def __init__(self, new, number, delimiter='.'):
+    def __init__(self, new, last, delimiter='.'):
         self.new = new
-        self.number = number
+        self.last = last
         self.delimiter = delimiter
 
     def is_new(self):
-        return self.new
-
-    def get_number(self):
-        if isinstance(self.number, list):
-            return self.delimiter.join([str(x) for x in self.number])
+        if self.new == self.last:
+            return False
         else:
-            return self.number
+            return True
+
+    def get(self, last=False):
+        value = None
+        if last:
+            value = self.last
+        else:
+            value = self.new
+        if isinstance(value, list):
+            return self.delimiter.join([str(x) for x in value])
+        else:
+            return value
