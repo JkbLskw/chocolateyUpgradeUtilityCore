@@ -13,6 +13,7 @@ class AbstractPackage(object):
 
     def __init__(self):
         self.ONE_HUNDRET = 100
+        self.MB_BASE2 = 1048576
         self.temp_dir = getcwd() + "\\temp\\"
         self.temp_path = self.temp_dir
         self.chocolatey_url_pattern = r"https:\/\/chocolatey\.org\/api\/\w\d\/package\/.*"
@@ -60,9 +61,12 @@ class AbstractPackage(object):
 
     def progress(self, count, block_size, total_size):
         count_size = count * block_size
+        current = count_size / self.MB_BASE2
+        total = total_size / self.MB_BASE2
         percent = int(count_size * 100 / total_size)
         date = datetime.datetime.now().strftime("%d/%m/%Y %H:%M:%S")
-        sys.stdout.write("\r%s [%s] downloading... %d%%" % (date, type(self).__name__, percent))
+        pattern = "\r%s [%s] downloading... %d%% - %.2f MB of %.2f MB"
+        sys.stdout.write(pattern % (date, type(self).__name__, percent, current, total))
         if percent is self.ONE_HUNDRET:
             sys.stdout.write("\r")
         sys.stdout.flush()
