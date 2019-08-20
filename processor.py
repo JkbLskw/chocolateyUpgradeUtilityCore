@@ -17,6 +17,7 @@ class Processor(object):
         checksum_pattern = r"\s+checksum\s+=\s+\'[a-zA-Z0-9]{64}\'"
         version_pattern = "version"
         for package in packages:
+            logging.info("[%s] comparing versions...", type(package).__name__)
             version = package.compare()
             if version.is_new():
                 manipulator = Manipulator()
@@ -26,19 +27,18 @@ class Processor(object):
                 changed_installscript = manipulator.plaintext(package.installscript(),
                                                               PackageHelper.checksum(package.temp_path),
                                                               checksum_pattern)
-                if changed_nuspec and changed_installscript:
-                    is_packed = chocolatey.pack(package.nuspec(), package.packagepath())
-                    logging.info("[%s] updated from (%s) to (%s) [nuspec: %s][installscript: %s][packed: %s]",
-                                 type(package).__name__,
-                                 version.get(last=True),
-                                 version.get(),
-                                 str(changed_nuspec),
-                                 str(changed_installscript),
-                                     is_packed)
+                is_packed = chocolatey.pack(package.nuspec(), package.packagepath())
+                logging.info("[%s] updated from (%s) to (%s) [nuspec: %s][installscript: %s][packed: %s]",
+                             type(package).__name__,
+                             version.get(last=True),
+                             version.get(),
+                             str(changed_nuspec),
+                             str(changed_installscript),
+                             is_packed)
             else:
                 logging.info("[%s] up to date", type(package).__name__)
-            package.cleanup()
+            PackageHelper.cleanup(package.temp_path, package.temp_dir)
 
 
 if __name__ == "__main__":
-    Processor.upgrade(Chocolatey(), [Elster(), Cocuun()])
+    Processor.upgrade(Chocolatey(), [Deezer(), Cocuun(), Elster()])
