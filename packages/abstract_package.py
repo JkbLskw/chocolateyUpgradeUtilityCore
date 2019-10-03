@@ -68,7 +68,7 @@ class AbstractPackage(object):
         pattern = "\r%s [%s] downloading... %d%% - %.2f MB of %.2f MB"
         sys.stdout.write(pattern % (date, type(self).__name__, percent, current, total))
         if percent is self.ONE_HUNDRET:
-            sys.stdout.write("\r")
+            sys.stdout.write("\r\n")
         sys.stdout.flush()
 
     def compare(self):
