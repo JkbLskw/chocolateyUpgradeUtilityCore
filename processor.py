@@ -6,6 +6,8 @@ from packages.elster import Elster
 from packages.cocuun import Cocuun
 import logging
 
+from packages.jameica import Jameica
+
 logging.basicConfig(level=logging.INFO, format='%(asctime)s %(message)s', datefmt='%d/%m/%Y %H:%M:%S')
 
 
@@ -41,4 +43,4 @@ class Processor(object):
 
 
 if __name__ == "__main__":
-    Processor.upgrade(Chocolatey(), [Deezer(), Cocuun(), Elster()])
+    Processor.upgrade(Chocolatey(), [Jameica()])

@@ -16,4 +16,4 @@ class Exe(AbstractExecutable):
         for language, code in languages:
             fileinfo = self.fileinfo_string % (language, code, self.fileinfo_versionstring)
             # get first version info
-            return [int(x) for x in win32api.GetFileVersionInfo(self.temp_path, fileinfo).split(".")]
+            return [int(x) for x in win32api.GetFileVersionInfo(path, fileinfo).split(".")]
