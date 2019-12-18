@@ -39,7 +39,7 @@ class Processor(object):
                              is_packed)
             else:
                 logging.info("[%s] up to date", type(package).__name__)
-            PackageHelper.cleanup(package.temp_path, package.temp_dir)
+            PackageHelper.cleanup(package.temp_path, package.temp_dir, package.executabletempdir())
 
 
 if __name__ == "__main__":

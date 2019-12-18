@@ -53,6 +53,10 @@ class AbstractPackage(object):
         """name of zipped executable"""
         return None
 
+    def executabletempdir(self):
+        """temp directory for zipped executable"""
+        return None
+
     def chocolatey_version(self, url):
         version_number = None
         if re.match(self.chocolatey_url_pattern, url):

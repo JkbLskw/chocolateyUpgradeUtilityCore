@@ -15,7 +15,8 @@ class Jameica(AbstractPackage, Exe):
         self.install_script_name = "chocolateyInstall.ps1"
         self.uninstall_script_name = "chocolateyUninstall.ps1"
         self.download_link = "https://www.willuhn.de/products/jameica/releases/current/jameica/jameica-win64-2.8.6.zip"
-        self.executable_path = "jameica/jameica-win64.exe"
+        self.executable_temp_dir = "jameica"
+        self.executable_name = "jameica-win64.exe"
 
     def downloadlink(self):
         return self.download_link
@@ -36,4 +37,7 @@ class Jameica(AbstractPackage, Exe):
         return self.packagepath() + self.package_tools_path + self.uninstall_script_name
 
     def executablepath(self):
-        return self.executable_path
+        return self.executable_temp_dir + "/" + self.executable_name
+
+    def executabletempdir(self):
+        return self.temp_dir + self.executable_temp_dir
