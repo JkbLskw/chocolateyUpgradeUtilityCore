@@ -41,11 +41,8 @@ class PackageHelper(object):
         return "\\".join([executable_temp_path, executable_path])
 
     @staticmethod
-    def cleanup(temp_path, temp_dir, executable_temp_dir=None):
+    def cleanup(temp_path, temp_dir):
         if path.exists(temp_path):
             remove(temp_path)
-        if executable_temp_dir is not None:
-            if path.exists(executable_temp_dir):
-                shutil.rmtree(executable_temp_dir)
-        if path.exists(temp_dir) and len(listdir(temp_dir)) is 0:
+        if path.exists(temp_dir) and len(listdir(temp_dir)) == 0:
             rmdir(temp_dir)

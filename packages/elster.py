@@ -1,5 +1,5 @@
 from packages.abstract_package import AbstractPackage
-from execuable.msi import Msi
+from executable.msi import Msi
 
 
 class Elster(AbstractPackage, Msi):

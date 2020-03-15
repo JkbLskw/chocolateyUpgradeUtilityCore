@@ -39,8 +39,8 @@ class Processor(object):
                              is_packed)
             else:
                 logging.info("[%s] up to date", type(package).__name__)
-            PackageHelper.cleanup(package.temp_path, package.temp_dir, package.executabletempdir())
+            PackageHelper.cleanup(package.temp_path, package.temp_dir)
 
 
 if __name__ == "__main__":
-    Processor.upgrade(Chocolatey(), [Jameica()])
+    Processor.upgrade(Chocolatey(), [Deezer(), Cocuun(), Elster(), Jameica()])

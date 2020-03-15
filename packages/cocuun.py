@@ -1,4 +1,4 @@
-from execuable.exe import Exe
+from executable.exe import Exe
 from packages.abstract_package import AbstractPackage
 
 

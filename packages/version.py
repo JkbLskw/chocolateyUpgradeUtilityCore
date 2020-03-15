@@ -5,6 +5,8 @@ class Version(object):
         self.delimiter = delimiter
 
     def is_new(self):
+        if self.new is None:
+            return False
         if len(self.new) == len(self.last):
             for i in range(len(self.new)):
                 if self.new[i] > self.last[i]:

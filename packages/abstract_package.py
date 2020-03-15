@@ -5,19 +5,17 @@ from os import getcwd
 from urllib.request import urlopen
 from packages.version import Version
 from helper.package_helper import PackageHelper
-import logging
 import datetime
 
 class AbstractPackage(object):
     __metaclass__ = ABCMeta
 
-    def __init__(self, zipped=False):
+    def __init__(self):
         self.ONE_HUNDRET = 100
         self.MB_BASE2 = 1048576
         self.temp_dir = getcwd() + "\\temp\\"
         self.temp_path = self.temp_dir
         self.chocolatey_url_pattern = r"https:\/\/chocolatey\.org\/api\/\w\d\/package\/.*"
-        self.zipped = zipped
 
     @abstractmethod
     def downloadlink(self):
@@ -49,14 +47,6 @@ class AbstractPackage(object):
         """uninstallscript of package"""
         return
 
-    def executablepath(self):
-        """name of zipped executable"""
-        return None
-
-    def executabletempdir(self):
-        """temp directory for zipped executable"""
-        return None
-
     def chocolatey_version(self, url):
         version_number = None
         if re.match(self.chocolatey_url_pattern, url):
@@ -82,11 +72,10 @@ class AbstractPackage(object):
 
     def compare(self):
         """ compares versions of two files with given urls """
-        self.temp_path = PackageHelper.download(self.downloadlink(), self.temp_path, self.progress)
-        download_version = None
-        if self.zipped:
-            download_version = self.version(PackageHelper.unzip(self.temp_path, self.executablepath()))
-        else:
-            download_version = self.version(self.temp_path)
         chocolatey_version = self.chocolatey_version(self.chocolateylink())
+        download_link = self.downloadlink()
+        if download_link is None:
+            return Version(None, chocolatey_version)
+        self.temp_path = PackageHelper.download(download_link, self.temp_path, self.progress)
+        download_version = self.version(self.temp_path)
         return Version(download_version, chocolatey_version)
