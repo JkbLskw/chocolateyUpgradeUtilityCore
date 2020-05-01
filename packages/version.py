@@ -5,16 +5,12 @@ class Version(object):
         self.delimiter = delimiter
 
     def is_new(self):
-        if self.new is None:
+        if self.new is None:  # none new version
             return False
-        if len(self.new) == len(self.last):
-            for i in range(len(self.new)):
-                if self.new[i] > self.last[i]:
-                    return True
-        else:
-            if self.new == self.last:
-                return False
-            else:
+        if self.last is None:
+            return True
+        for i in range(len(self.new) if len(self.new) >= len(self.last) else len(self.last)):
+            if i < len(self.new) and i < len(self.last) and self.new[i] > self.last[i]:  # number at position higher
                 return True
         return False
 

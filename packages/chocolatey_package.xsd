@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:element name="package">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="name" type="xs:string"/>
+                <xs:element name="links">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="extern" type="xs:anyURI"/>
+                            <xs:element name="chocolatey" type="xs:anyURI"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+               <!-- <xs:element name="scripts">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="install" type="xs:string"/>
+                            <xs:element name="uninstall" type="xs:string"/>
+                            <xs:element name="nuspec" type="xs:string"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element> -->
+            </xs:sequence>
+            <xs:attribute name="type" use="required">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:enumeration value="exe"/>
+                        <xs:enumeration value="msi"/>
+                        <xs:enumeration value="plain"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:attribute>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>

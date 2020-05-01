@@ -1,6 +1,7 @@
 from helper.package_helper import PackageHelper
 from helper.manipulator import Manipulator
 from core.chocolatey import Chocolatey
+from helper.parser import Parser
 from packages.deezer import Deezer
 from packages.elster import Elster
 from packages.cocuun import Cocuun
@@ -27,7 +28,7 @@ class Processor(object):
                                                  version_pattern,
                                                  version.get())
                 changed_installscript = manipulator.plaintext(package.installscript(),
-                                                              PackageHelper.checksum(package.temp_path),
+                                                              PackageHelper.checksum(package.checksumpath()),
                                                               checksum_pattern)
                 is_packed = chocolatey.pack(package.nuspec(), package.packagepath())
                 logging.info("[%s] updated from (%s) to (%s) [nuspec: %s][installscript: %s][packed: %s]",
@@ -38,9 +39,11 @@ class Processor(object):
                              str(changed_installscript),
                              is_packed)
             else:
-                logging.info("[%s] up to date", type(package).__name__)
+                logging.info("[%s] up to date (%s)", type(package).__name__, version.get(last=True))
             PackageHelper.cleanup(package.temp_path, package.temp_dir)
 
 
 if __name__ == "__main__":
+    # package = Parser().parse("packages/deezer.xml")
     Processor.upgrade(Chocolatey(), [Deezer(), Cocuun(), Elster(), Jameica()])
+

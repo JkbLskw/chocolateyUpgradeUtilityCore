@@ -33,3 +33,6 @@ class Deezer(AbstractPackage, Exe):
 
     def uninstallscript(self):
         return self.packagepath() + self.package_tools_path + self.uninstall_script_name
+
+    def checksumpath(self):
+        return self.temp_path

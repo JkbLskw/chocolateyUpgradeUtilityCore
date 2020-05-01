@@ -33,3 +33,6 @@ class Elster(AbstractPackage, Msi):
 
     def downloadlink(self):
         return self.download_link
+
+    def checksumpath(self):
+        return self.temp_path

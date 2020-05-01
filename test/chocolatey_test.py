@@ -11,5 +11,5 @@ class ChocolateyTest(unittest.TestCase):
         nuspec_path = resource_path + "testpackage.nuspec"
         not_nuspec = resource_path + "not.nuspec"
         chocolatey = Chocolatey()
-        self.assertTrue(chocolatey.pack(nuspec_path, resource_path, "1.2.3.4"))
-        self.assertFalse(chocolatey.pack(not_nuspec, resource_path, "1.2.3.4"))
+        self.assertTrue(chocolatey.pack(nuspec_path, resource_path))
+        self.assertFalse(chocolatey.pack(not_nuspec, resource_path))

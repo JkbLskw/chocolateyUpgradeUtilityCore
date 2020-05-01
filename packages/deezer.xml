@@ -1,0 +1,7 @@
+<package type="exe">
+  <name>Deezer</name>
+  <links>
+    <extern>https://www.deezer.com/desktop/download?platform=win32&amp;architecture=x86</extern>
+    <chocolatey>https://chocolatey.org/api/v2/package/deezer</chocolatey>
+  </links>
+</package>

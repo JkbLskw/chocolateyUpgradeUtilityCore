@@ -5,7 +5,7 @@ import re
 class Chocolatey(object):
 
     def __init__(self):
-        # not really beautiful :-(
+        # FIXME: not really beautiful :-(
         self.success_pattern = "Successfully created package"
         self.command = "chocolatey"
         self.args = [self.command, "pack"]

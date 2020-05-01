@@ -47,6 +47,11 @@ class AbstractPackage(object):
         """uninstallscript of package"""
         return
 
+    @abstractmethod
+    def checksumpath(self):
+        """filepath for checksum of package"""
+        return
+
     def chocolatey_version(self, url):
         version_number = None
         if re.match(self.chocolatey_url_pattern, url):

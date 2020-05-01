@@ -16,11 +16,11 @@ class PackageHelper(object):
         :param hashtype: type of hashing
         :return: hex digest of hash
         """
-        hash256 = hashtype()
+        hash = hashtype()
         with open(temp_path, "rb") as f:
             for byte_block in iter(lambda: f.read(4096), b""):
-                hash256.update(byte_block)
-        return hash256.hexdigest()
+                hash.update(byte_block)
+        return hash.hexdigest()
 
     @staticmethod
     def download(url, temp_path, progress_hook=None):
