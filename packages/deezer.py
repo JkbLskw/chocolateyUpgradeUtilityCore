@@ -5,11 +5,11 @@ from packages.abstract_package import AbstractPackage
 class Deezer(AbstractPackage, Exe):
     """ deezer package """
 
-    def __init__(self):
+    def __init__(self, base_path):
         Exe.__init__(self)
-        AbstractPackage.__init__(self)
+        AbstractPackage.__init__(self, base_path)
         self.chocolatey_link = "https://chocolatey.org/api/v2/package/deezer"
-        self.package_path = "D:/Chocolatey_Packages/deezer-package/"
+        self.package_path = "deezer-package/"
         self.package_tools_path = "tools/"
         self.nuspec_name = "deezer.nuspec"
         self.install_script_name = "chocolateyInstall.ps1"
@@ -23,7 +23,7 @@ class Deezer(AbstractPackage, Exe):
         return self.chocolatey_link
 
     def packagepath(self):
-        return self.package_path
+        return self.base_package_path + self.package_path
 
     def nuspec(self):
         return self.packagepath() + self.nuspec_name

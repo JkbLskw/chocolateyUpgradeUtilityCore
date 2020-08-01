@@ -5,12 +5,13 @@ from helper.parser import Parser
 from packages.deezer import Deezer
 from packages.elster import Elster
 from packages.cocuun import Cocuun
-import logging
-
 from packages.jameica import Jameica
+import logging
+import sys
+
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s %(message)s', datefmt='%d/%m/%Y %H:%M:%S')
-
+named_packages = {"deezer":Deezer, "elster":Elster, "cocuun":Cocuun, "jameica":Jameica }
 
 class Processor(object):
 
@@ -45,5 +46,9 @@ class Processor(object):
 
 if __name__ == "__main__":
     # package = Parser().parse("packages/deezer.xml")
-    Processor.upgrade(Chocolatey(), [Deezer(), Cocuun(), Elster(), Jameica()])
+    instantiated_packages = []
+    base_path = sys.argv[1]
+    for arg in sys.argv[2:]:
+        instantiated_packages.append(named_packages[arg](base_path))
+    Processor.upgrade(Chocolatey(), instantiated_packages)
 

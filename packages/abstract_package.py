@@ -10,12 +10,13 @@ import datetime
 class AbstractPackage(object):
     __metaclass__ = ABCMeta
 
-    def __init__(self):
+    def __init__(self, base_path):
         self.ONE_HUNDRET = 100
         self.MB_BASE2 = 1048576
         self.temp_dir = getcwd() + "\\temp\\"
         self.temp_path = self.temp_dir
         self.chocolatey_url_pattern = r"https:\/\/chocolatey\.org\/api\/\w\d\/package\/.*"
+        self.base_package_path = base_path
 
     @abstractmethod
     def downloadlink(self):
