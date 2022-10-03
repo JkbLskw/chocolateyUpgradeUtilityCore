@@ -24,6 +24,11 @@ class AbstractPackage(object):
         return
 
     @abstractmethod
+    def installationlink(self):
+        """installation-link of package with specific version"""
+        return
+
+    @abstractmethod
     def chocolateylink(self):
         """chocolatey-link of package"""
         return
