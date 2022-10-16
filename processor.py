@@ -1,3 +1,6 @@
+from os import getcwd
+
+from executable.exe import Exe
 from helper.package_helper import PackageHelper
 from helper.manipulator import Manipulator
 from core.chocolatey import Chocolatey
@@ -47,6 +50,9 @@ class Processor(object):
             else:
                 logging.info("[%s] up to date (%s)", type(package).__name__, version.get(last=True))
             PackageHelper.cleanup(package.temp_path, package.temp_dir)
+
+            if isinstance(package, Exe):
+                PackageHelper.cleanup(getcwd() + ".\\temp\\zip", package.temp_dir)
 
 
 if __name__ == "__main__":

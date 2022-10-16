@@ -43,6 +43,9 @@ class PackageHelper(object):
     @staticmethod
     def cleanup(temp_path, temp_dir):
         if path.exists(temp_path):
-            remove(temp_path)
+            if path.isdir(temp_path):
+                shutil.rmtree(temp_path)
+            else:
+                remove(temp_path)
         if path.exists(temp_dir) and len(listdir(temp_dir)) == 0:
             rmdir(temp_dir)
