@@ -23,29 +23,38 @@ class Processor(object):
     def upgrade(cls, chocolatey, manipulate, packages):
         """ starts comparison and upgrades of packages """
         checksum_pattern = r"\s+checksum\s+=\s+\'[a-zA-Z0-9]{64}\'"
+        installation_link_pattern = r"\s+url\s+=\s+\'[a-zA-Z0-9\/\.\:]+\'"
         version_pattern = "version"
         for package in packages:
             logging.info("[%s] comparing versions...", type(package).__name__)
             version = package.compare()
             if version.is_new():
                 changed_nuspec = False
-                changed_installscript = False
+                changed_checksum = False
+                changed_installation_link = False
                 is_packed = False
                 if manipulate == "true":
                     manipulator = Manipulator()
                     changed_nuspec = manipulator.xml(package.nuspec(),
                                                      version_pattern,
                                                      version.get())
-                    changed_installscript = manipulator.plaintext(package.installscript(),
+                    changed_checksum = manipulator.plaintext(package.installscript(),
                                                                   PackageHelper.checksum(package.checksumpath()),
                                                                   checksum_pattern)
+                    if package.installationlink() != None:
+                        trimmed_version = version.get().split('.')
+                        trimmed_version.pop()
+                        changed_installation_link = manipulator.plaintext(package.installscript(),
+                            package.installationlink() + '.'.join(trimmed_version),
+                            installation_link_pattern)
                     is_packed = chocolatey.pack(package.nuspec(), package.packagepath())
-                logging.info("[%s] update available from (%s) to (%s) [nuspec: %s][installscript: %s][packed: %s]",
+                logging.info("[%s] update available from (%s) to (%s) [nuspec: %s][new checksum: %s][new link: %s][packed: %s]",
                              type(package).__name__,
                              version.get(last=True),
                              version.get(),
                              str(changed_nuspec),
-                             str(changed_installscript),
+                             str(changed_checksum),
+                             str(changed_installation_link),
                              is_packed)
             else:
                 logging.info("[%s] up to date (%s)", type(package).__name__, version.get(last=True))

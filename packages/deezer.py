@@ -15,9 +15,13 @@ class Deezer(AbstractPackage, Exe):
         self.install_script_name = "chocolateyInstall.ps1"
         self.uninstall_script_name = "chocolateyUninstall.ps1"
         self.download_link = "https://www.deezer.com/desktop/download?platform=win32&architecture=x86"
+        self.installation_link = "https://www.deezer.com/desktop/download/artifact/win32/x86/"
 
     def downloadlink(self):
         return self.download_link
+
+    def installationlink(self):
+        return self.installation_link
 
     def chocolateylink(self):
         return self.chocolatey_link
